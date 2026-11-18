@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: accounting
+    runtime: node
+    plan: 0.5c-512mb
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run db:push && npm start
+    healthCheckPath: /api/health
+    disk:
+      name: accounting-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
+      - key: DATABASE_URL
+        value: file:/var/data/accounting.db
+      - key: APP_USERNAME
+        value: lin
+      - key: APP_PASSWORD
+        sync: false
